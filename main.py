@@ -13,6 +13,7 @@ from scheduler import Scheduler
 from project import Project
 
 
+
 def main():
     """Main driver of the program."""
     menu()
@@ -27,7 +28,7 @@ def menu():
     d. Get a Project
     e. Exit
     """)
-    print(67*"-")           
+    print(66*"-")           
 
     choice = input("""Please enter your choice: """).lower()
     
@@ -50,14 +51,14 @@ def menu():
         menu()
 
 def menu_view_project():
-    print(67*"-")
+    print (26*"-","VIEW PROJECT",26*"-")
     print("""
     a. One Project
     b. Completed
     c. All Projects
     d. Back
     """)
-    print(67*"-")
+    print(66*"-")
 
     choice = input("""Please enter your choice: """).lower()
 
@@ -76,22 +77,25 @@ def menu_view_project():
 
 
 def menu_schedule_project():
-    print(67*"-")
+    print (24*"-","SCHEDULE PROJECT",24*"-")
     print("""
     a. Create Schedule
     b. View Updated Schedule
     c. Back
     """)
-    print(67*"-")
+    print(66*"-")
 
     choice = input("""Please enter your choice: """).lower()
 
     if choice == "a":
-        scheduler = Scheduler()
+        print(66*"-")
+        print("A schedule has been created.")
         scheduler.createSchedule()
+        menu_schedule_project()
     elif choice == "b":
-        scheduler = Scheduler()
+        print (28*"-","SCHEDULE",28*"-")
         scheduler.viewUpdatedSchedule()
+        menu_schedule_project()
     elif choice == "c":
         menu()
     else:
@@ -99,6 +103,5 @@ def menu_schedule_project():
         print("Try again.")
         menu_schedule_project()
 
-
-
+scheduler = Scheduler()
 main()
