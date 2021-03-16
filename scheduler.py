@@ -17,11 +17,15 @@ class Scheduler:
 
         for row in table:
             if line_count == 0:
-                schedule.append(Project(row['id'],row['title'],row['size'],row['priority']))
+                schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
         schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
         with open('schedule.txt', 'w') as f:
             for project in schedule:
-                f.write("%s\n" % (project.get_id()+'          '+project.get_title()+'          '+project.get_size()+'          '+project.get_priority()))
+                f.write("%s\n" % (project.get_id() + '          ' +
+                                  project.get_title() + '          ' +
+                                  project.get_size()+'          ' +
+                                  project.get_priority())
+                        )
         
         file.close()
 
