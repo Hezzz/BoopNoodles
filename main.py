@@ -12,7 +12,6 @@ import sys
 from scheduler import Scheduler
 # from project import Project
 
-
 def main():
     """Main driver of the program."""
     menu()
