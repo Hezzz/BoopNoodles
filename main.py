@@ -9,13 +9,13 @@ Authors:
 """
 
 import sys
+import scheduler
+import project
 
 
 def main():
     """Main driver of the program."""
-    menu()
 
-def menu():
     print (30*"-","MENU",30*"-")
 
     print("""
@@ -35,12 +35,15 @@ def menu():
         #view_project()
         pass
     elif choice == "c":
-        #schedule_project()
-        pass
+        scheduler = Scheduler()
+        scheduler.createSchedule()
     elif choice == "d":
+        scheduler = Scheduler()
+        scheduler.viewUpdatedSchedule()
+    elif choice == "e":
         #getproject()
         pass
-    elif choice == "e":
+    elif choice == "f":
         print("\nYou have exited.....")
         sys.exit
     else:
