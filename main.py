@@ -10,7 +10,7 @@ Authors:
 
 import sys
 from scheduler import Scheduler
-from project import Project
+# from project import Project
 
 
 def main():
@@ -90,12 +90,15 @@ def menu_schedule_project():
 
     if choice == "a":
         print(66*"-")
-        print("A schedule has been created.")
-        scheduler.create_schedule()
+        if scheduler.create_schedule():
+            print("A schedule has been created.")
+        else:
+            print("Required file `project.txt` does not exist!")
         menu_schedule_project()
     elif choice == "b":
         print(28 * "-", "SCHEDULE", 28 * "-")
-        scheduler.view_updated_schedule()
+        if not scheduler.view_updated_schedule():
+            print("Please create a schedule first.")
         menu_schedule_project()
     elif choice == "c":
         menu()
