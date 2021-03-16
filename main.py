@@ -9,13 +9,15 @@ Authors:
 """
 
 import sys
-import scheduler
-import project
+from scheduler import Scheduler
+from project import Project
 
 
 def main():
     """Main driver of the program."""
+    menu()
 
+def menu():
     print (30*"-","MENU",30*"-")
 
     print("""
@@ -25,31 +27,78 @@ def main():
     d. Get a Project
     e. Exit
     """)
-    print(67*"-")                  
+    print(67*"-")           
+
     choice = input("""Please enter your choice: """).lower()
     
     if choice == "a":
         #input_project()
         pass
     elif choice == "b":
-        #view_project()
-        pass
+        menu_view_project()
     elif choice == "c":
-        scheduler = Scheduler()
-        scheduler.createSchedule()
+        menu_schedule_project()
     elif choice == "d":
-        scheduler = Scheduler()
-        scheduler.viewUpdatedSchedule()
-    elif choice == "e":
         #getproject()
         pass
-    elif choice == "f":
+    elif choice == "e":
         print("\nYou have exited.....")
         sys.exit
     else:
         print("\nPlease select letter in the choices only.")
         print("Try again.")
         menu()
+
+def menu_view_project():
+    print(67*"-")
+    print("""
+    a. One Project
+    b. Completed
+    c. All Projects
+    d. Back
+    """)
+    print(67*"-")
+
+    choice = input("""Please enter your choice: """).lower()
+
+    if choice == "a":
+        pass
+    elif choice == "b":
+        pass
+    elif choice == "c":
+        pass
+    elif choice == "d":
+        menu()
+    else:
+        print("\nPlease select letter in the choices only.")
+        print("Try again.")
+        menu_view_project()
+
+
+def menu_schedule_project():
+    print(67*"-")
+    print("""
+    a. Create Schedule
+    b. View Updated Schedule
+    c. Back
+    """)
+    print(67*"-")
+
+    choice = input("""Please enter your choice: """).lower()
+
+    if choice == "a":
+        scheduler = Scheduler()
+        scheduler.createSchedule()
+    elif choice == "b":
+        scheduler = Scheduler()
+        scheduler.viewUpdatedSchedule()
+    elif choice == "c":
+        menu()
+    else:
+        print("\nPlease select letter in the choices only.")
+        print("Try again.")
+        menu_schedule_project()
+
 
 
 main()

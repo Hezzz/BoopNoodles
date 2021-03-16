@@ -1,5 +1,5 @@
 import csv
-import project
+from project import Project
 
 class Scheduler:
     schedule = []
@@ -17,8 +17,7 @@ class Scheduler:
         for row in table:
           if line_count == 0:
             schedule.append(Project(row['id'],row['title'],row['size'],row['priority']))
-        schedule.sort(key=lambda x: x.get_priority())
-        schedule.sort(key=lambda x: x.get_size(), reverse=True)
+        schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
 
         
         file.close()
