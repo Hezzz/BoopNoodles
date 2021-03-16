@@ -9,6 +9,9 @@ Authors:
 """
 
 import sys
+import csv
+import os.path
+from os import path
 from scheduler import Scheduler
 from project import Project
 
@@ -33,8 +36,7 @@ def menu():
     choice = input("""Please enter your choice: """).lower()
     
     if choice == "a":
-        #input_project()
-        pass
+        input_project()
     elif choice == "b":
         menu_view_project()
     elif choice == "c":
@@ -102,6 +104,37 @@ def menu_schedule_project():
         print("\nPlease select letter in the choices only.")
         print("Try again.")
         menu_schedule_project()
+
+def input_project():
+
+    #Input Project Details
+    id_num = int(input("ID Number: "))
+    title = input("Title: ")
+    size = int(input("Size: "))
+    priority = int(input("Priority: "))
+
+    #Check if projects.csv exist; if not then create a project.csv
+    if (path.exists('projects.csv') == False):
+        create_file = open('projects.csv','w')
+        writer = csv.writer(create_file)
+        writer.writerow(["id","title","size","priority"])
+
+        create_file.close()
+
+    #Field/Column names in project.csv
+    field_names = ["id","title","size","priority"]
+
+    #Open project.csv and append inputted project details
+    file = open('projects.csv','a+',newline='')
+    writer = csv.DictWriter(file,fieldnames = field_names)
+
+    writer.writerow({"id":id_num,"title":title,"size":size,"priority":priority})
+    print("Project has been added.")
+
+    file.close()
+    menu()
+
+
 
 scheduler = Scheduler()
 main()

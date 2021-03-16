@@ -10,7 +10,7 @@ class Scheduler:
     def createSchedule(self):
         schedule = self.schedule
         
-        file = open('projects.txt','r',encoding='utf-8-sig')
+        file = open('projects.csv','r',encoding='utf-8-sig')
         table = csv.DictReader(file)
         line_count = 0
 
