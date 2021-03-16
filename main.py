@@ -16,13 +16,13 @@ from scheduler import Scheduler
 from project import Project
 
 
-
 def main():
     """Main driver of the program."""
     menu()
 
+
 def menu():
-    print (30*"-","MENU",30*"-")
+    print(30 * "-", "MENU", 30 * "-")
 
     print("""
     a. Input Project Details
@@ -31,9 +31,9 @@ def menu():
     d. Get a Project
     e. Exit
     """)
-    print(66*"-")           
+    print(66 * "-")
 
-    choice = input("""Please enter your choice: """).lower()
+    choice = input("Please enter your choice: ").lower()
     
     if choice == "a":
         input_project()
@@ -42,27 +42,28 @@ def menu():
     elif choice == "c":
         menu_schedule_project()
     elif choice == "d":
-        #getproject()
+        # get_project()
         pass
     elif choice == "e":
         print("\nYou have exited.....")
-        sys.exit
+        sys.exit()
     else:
         print("\nPlease select letter in the choices only.")
         print("Try again.")
         menu()
 
+
 def menu_view_project():
-    print (26*"-","VIEW PROJECT",26*"-")
+    print(26 * "-", "VIEW PROJECT", 26 * "-")
     print("""
     a. One Project
     b. Completed
     c. All Projects
     d. Back
     """)
-    print(66*"-")
+    print(66 * "-")
 
-    choice = input("""Please enter your choice: """).lower()
+    choice = input("Please enter your choice: ").lower()
 
     if choice == "a":
         pass
@@ -79,24 +80,24 @@ def menu_view_project():
 
 
 def menu_schedule_project():
-    print (24*"-","SCHEDULE PROJECT",24*"-")
+    print(24 * "-", "SCHEDULE PROJECT", 24 * "-")
     print("""
     a. Create Schedule
     b. View Updated Schedule
     c. Back
     """)
-    print(66*"-")
+    print(66 * "-")
 
-    choice = input("""Please enter your choice: """).lower()
+    choice = input("Please enter your choice: ").lower()
 
     if choice == "a":
         print(66*"-")
         print("A schedule has been created.")
-        scheduler.createSchedule()
+        scheduler.create_schedule()
         menu_schedule_project()
     elif choice == "b":
-        print (28*"-","SCHEDULE",28*"-")
-        scheduler.viewUpdatedSchedule()
+        print(28 * "-", "SCHEDULE", 28 * "-")
+        scheduler.view_updated_schedule()
         menu_schedule_project()
     elif choice == "c":
         menu()
