@@ -19,14 +19,12 @@ class Scheduler:
                 line_count += 1
 
             self.__schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
-            with open('schedule.txt', 'w') as f:
+            with open('schedule.csv', 'w' , newline='') as f:
+                csv_writer = csv.writer(f)
                 for project in self.__schedule:
-                    f.write("%s\n" % (project.get_id() + '          ' +
-                                      project.get_title() + '          ' +
-                                      project.get_size() + '          ' +
-                                      project.get_priority())
-                            )
+                    csv_writer.writerow([project.get_id(),project.get_title(),project.get_size(),project.get_priority()])
             file.close()
+
         except IOError:
             return False
         else:
@@ -35,7 +33,7 @@ class Scheduler:
     @staticmethod
     def view_updated_schedule():
         try:
-            with open('schedule.txt', 'r') as schedules:
+            with open('schedule.csv', 'r') as schedules:
                 print("ID          TITLE          SIZE        PRIORITY")
                 for project in schedules:
                     print(project)
