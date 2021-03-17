@@ -42,7 +42,24 @@ class ProjectManager:
             print("Wrong input, try again.")
 
     def view_one(self, project_id):
-        pass
+
+        print(28 * "-", "PROJECT", 29 * "-")
+        
+        file = open('projects.csv','r',encoding='utf-8-sig')
+        table = csv.DictReader(file)
+
+        line_count = 0
+        for row in table:
+            if project_id in row['id']:
+                print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
+                print("{:<15}{:^10}{:>15}{:>20}".format(row['id'],row['title'],row['size'],row['priority']))
+                line_count+=1
+                break
+
+        if line_count == 0:
+            print("Project does not exist. Please try again")
+        
+        file.close()
 
     def view_completed(self):
         """Prints all the completed projects read from the `completed_projects.csv` file."""
@@ -53,8 +70,8 @@ class ProjectManager:
     def view_all(self):
         """Prints all the projects received read from the `projects.csv` file."""
 
-        error_message = "Required file `project.csv` does not exist! Input project details first."
-        self.view_file('schedule.csv', error_message)
+        error_message = "Required file `projects.csv` does not exist! Input project details first."
+        self.view_file('projects.csv', error_message)
 
     def get_project(self):
         """
@@ -164,6 +181,7 @@ class ProjectManager:
         try:
             with open(filename, 'r') as row:
                 print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
+                next(row)
                 for col in row:
                     col = col.split(',')
                     print("{:<15}{:^10}{:>15}{:>20}".format(col[0],col[1],col[2],col[3]))
