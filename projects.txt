@@ -1,7 +1,0 @@
-id,title,size,priority
-1,project1,5,6
-2,project2,3,4
-3,project3,5,6
-4,project4,2,3
-5,project5,1,1
-6,project2,2,4
