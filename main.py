@@ -38,7 +38,10 @@ def menu():
     elif choice == "c":
         menu_schedule_project()
     elif choice == "d":
-        project_manager.get_project()
+        if project_manager.is_schedule_empty():
+            print("Please create a schedule first.")
+        else:
+            project_manager.get_project()
         menu()
     elif choice == "e":
         print("\nYou have exited.....")
@@ -64,9 +67,9 @@ def menu_view_project():
     if choice == "a":
         pass
     elif choice == "b":
-        pass
+        project_manager.view_completed()
     elif choice == "c":
-        pass
+        project_manager.view_all()
     elif choice == "d":
         menu()
     else:
@@ -88,15 +91,17 @@ def menu_schedule_project():
 
     if choice == "a":
         print(66*"-")
-        if project_manager.create_schedule():
-            print("A schedule has been created.")
+        if not project_manager.is_schedule_empty():
+            print("Schedule already exists. Please finish first before creating a new one.")
         else:
-            print("Required file `project.csv` does not exist!")
+            project_manager.create_schedule()
         menu_schedule_project()
     elif choice == "b":
         print(28 * "-", "SCHEDULE", 28 * "-")
-        if not project_manager.view_updated_schedule():
+        if project_manager.is_schedule_empty():
             print("Please create a schedule first.")
+        else:
+            project_manager.view_updated_schedule()
         menu_schedule_project()
     elif choice == "c":
         menu()
