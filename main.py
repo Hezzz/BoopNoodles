@@ -9,10 +9,8 @@ Authors:
 """
 
 import sys
-import csv
-from os import path
 from project_manager import ProjectManager
-# from project import Project
+
 
 def main():
     """Main driver of the program."""
@@ -34,7 +32,7 @@ def menu():
     choice = input("Please enter your choice: ").lower()
     
     if choice == "a":
-        input_project()
+        project_manager.input_project()
     elif choice == "b":
         menu_view_project()
     elif choice == "c":
@@ -90,14 +88,14 @@ def menu_schedule_project():
 
     if choice == "a":
         print(66*"-")
-        if scheduler.create_schedule():
+        if project_manager.create_schedule():
             print("A schedule has been created.")
         else:
             print("Required file `project.csv` does not exist!")
         menu_schedule_project()
     elif choice == "b":
         print(28 * "-", "SCHEDULE", 28 * "-")
-        if not scheduler.view_updated_schedule():
+        if not project_manager.view_updated_schedule():
             print("Please create a schedule first.")
         menu_schedule_project()
     elif choice == "c":
@@ -107,36 +105,6 @@ def menu_schedule_project():
         print("Try again.")
         menu_schedule_project()
 
-def input_project():
 
-    #Input Project Details
-    id_num = int(input("ID Number: "))
-    title = input("Title: ")
-    size = int(input("Size: "))
-    priority = int(input("Priority: "))
-
-    #Check if projects.csv exist; if not then create a project.csv
-    if (path.exists('projects.csv') == False):
-        create_file = open('projects.csv','w')
-        writer = csv.writer(create_file)
-        writer.writerow(["id","title","size","priority"])
-
-        create_file.close()
-
-    #Field/Column names in project.csv
-    field_names = ["id","title","size","priority"]
-
-    #Open project.csv and append inputted project details
-    file = open('projects.csv','a+',newline='')
-    writer = csv.DictWriter(file,fieldnames = field_names)
-
-    writer.writerow({"id":id_num,"title":title,"size":size,"priority":priority})
-    print("Project has been added.")
-
-    file.close()
-    menu()
-
-
-
-scheduler = ProjectManager()
+project_manager = ProjectManager()
 main()
