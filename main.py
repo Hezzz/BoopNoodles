@@ -11,7 +11,7 @@ Authors:
 import sys
 import csv
 from os import path
-from scheduler import Scheduler
+from project_manager import ProjectManager
 # from project import Project
 
 def main():
@@ -138,5 +138,5 @@ def input_project():
 
 
 
-scheduler = Scheduler()
+scheduler = ProjectManager()
 main()

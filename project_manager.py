@@ -2,7 +2,7 @@ import csv
 from project import Project
 
 
-class Scheduler:
+class ProjectManager:
 
     def __init__(self):
         self.__schedule = []
@@ -19,7 +19,7 @@ class Scheduler:
                 line_count += 1
 
             self.__schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
-            with open('schedule.csv', 'w' , newline='') as f:
+            with open('schedule.csv', 'w', newline='') as f:
                 csv_writer = csv.writer(f)
                 for project in self.__schedule:
                     csv_writer.writerow([project.get_id(),project.get_title(),project.get_size(),project.get_priority()])
