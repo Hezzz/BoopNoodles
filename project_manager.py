@@ -90,9 +90,10 @@ class ProjectManager:
     def view_updated_schedule():
         try:
             with open('schedule.csv', 'r') as schedules:
-                print("ID          TITLE          SIZE        PRIORITY")
+                print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
                 for project in schedules:
-                    print(project.replace(",", "          "))
+                    project = project.split(',')
+                    print("{:<15}{:^10}{:>15}{:>20}".format(project[0],project[1],project[2],project[3]))
         except IOError:
             return False
         else:
