@@ -33,6 +33,7 @@ def menu():
     
     if choice == "a":
         project_manager.input_project()
+        menu()
     elif choice == "b":
         menu_view_project()
     elif choice == "c":

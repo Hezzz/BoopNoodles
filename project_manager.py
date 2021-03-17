@@ -31,7 +31,7 @@ class ProjectManager:
             priority = int(input("Priority: "))
 
             # Check if projects.csv exist; if not then create a project.csv
-            if path.exists('projects.csv'):
+            if path.exists('projects.csv') == False:
                 create_file = open('projects.csv', 'w')
                 writer = csv.writer(create_file)
                 writer.writerow(["id", "title", "size", "priority"])
@@ -44,7 +44,7 @@ class ProjectManager:
             with open('projects.csv', 'a+', newline='') as project_file:
                 writer = csv.DictWriter(project_file, fieldnames=field_names)
                 writer.writerow({"id": id_num, "title": title, "size": size, "priority": priority})
-                print("Project has been added.")
+                print("\nProject has been added.")
 
         except TypeError:
             print("Wrong input, try again.")
