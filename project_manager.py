@@ -163,8 +163,9 @@ class ProjectManager:
         """
         try:
             with open(filename, 'r') as row:
-                print("ID          TITLE          SIZE        PRIORITY")
+                print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
                 for col in row:
-                    print(col.replace(",", "          "))
+                    col = col.split(',')
+                    print("{:<15}{:^10}{:>15}{:>20}".format(col[0],col[1],col[2],col[3]))
         except IOError:
             print(error_message)
