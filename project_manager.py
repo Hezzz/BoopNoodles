@@ -92,7 +92,7 @@ class ProjectManager:
             with open('schedule.csv', 'r') as schedules:
                 print("ID          TITLE          SIZE        PRIORITY")
                 for project in schedules:
-                    print(project)
+                    print(project.replace(",", "          "))
         except IOError:
             return False
         else:
