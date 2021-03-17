@@ -38,8 +38,8 @@ def menu():
     elif choice == "c":
         menu_schedule_project()
     elif choice == "d":
-        # get_project()
-        pass
+        project_manager.get_project()
+        menu()
     elif choice == "e":
         print("\nYou have exited.....")
         sys.exit()

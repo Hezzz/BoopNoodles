@@ -14,8 +14,7 @@ class ProjectManager:
         self.__schedule = []
 
     # Project related functions
-    @staticmethod
-    def input_project():
+    def input_project(self):
         """
         Inputs project details and creates a `projects.csv` file if does not exist.
         Appends new project details to that file.
@@ -30,21 +29,9 @@ class ProjectManager:
             size = int(input("Size: "))
             priority = int(input("Priority: "))
 
-            # Check if projects.csv exist; if not then create a project.csv
-            if path.exists('projects.csv'):
-                create_file = open('projects.csv', 'w')
-                writer = csv.writer(create_file)
-                writer.writerow(["id", "title", "size", "priority"])
-                create_file.close()
-
-            # Field/Column names in project.csv
-            field_names = ["id", "title", "size", "priority"]
-
-            # Open project.csv and append inputted project details
-            with open('projects.csv', 'a+', newline='') as project_file:
-                writer = csv.DictWriter(project_file, fieldnames=field_names)
-                writer.writerow({"id": id_num, "title": title, "size": size, "priority": priority})
-                print("Project has been added.")
+            project = Project(project_id=id_num, title=title, size=size, priority=priority)
+            self.__overwrite_projects_file(file_name='projects.csv', project=project)
+            print("Project has been added.")
 
         except TypeError:
             print("Wrong input, try again.")
@@ -59,7 +46,36 @@ class ProjectManager:
         pass
 
     def get_project(self):
-        pass
+        self.view_updated_schedule()
+        project = self.__schedule.pop(0)
+
+        print("Project", project.get_title(), " has been removed from the schedule...")
+        self.__overwrite_projects_file(file_name='completed_projects.csv', project=project)
+        print("Project", project.get_title(), " added to completed list...")
+
+        self.__overwrite_schedule()
+        self.view_updated_schedule()
+
+    @staticmethod
+    def __overwrite_projects_file(file_name, project):
+        # Check if projects.csv exist; if not then create a `project.csv`
+        if not path.exists(file_name):
+            create_file = open(file_name, 'w')
+            writer = csv.writer(create_file)
+            writer.writerow(["id", "title", "size", "priority"])
+            create_file.close()
+
+        # Field/Column names in project.csv
+        field_names = ["id", "title", "size", "priority"]
+
+        # Open project.csv and append inputted project details
+        with open(file_name, 'a+', newline='') as project_file:
+            writer = csv.DictWriter(project_file, fieldnames=field_names)
+            writer.writerow({"id": project.get_id(),
+                             "title": project.get_title(),
+                             "size": project.get_size(),
+                             "priority": project.get_priority()}
+                            )
 
     # Scheduling related functions
     def create_schedule(self):
@@ -74,11 +90,7 @@ class ProjectManager:
                 line_count += 1
 
             self.__schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
-            with open('schedule.csv', 'w', newline='') as f:
-                csv_writer = csv.writer(f)
-                for project in self.__schedule:
-                    csv_writer.writerow([project.get_id(), project.get_title(), project.get_size(),
-                                         project.get_priority()])
+            self.__overwrite_schedule()
             file.close()
 
         except IOError:
@@ -97,3 +109,15 @@ class ProjectManager:
             return False
         else:
             return True
+
+    def __overwrite_schedule(self):
+        """
+        Creates and overwrites the `schedule.csv` file.
+        Used when creating a schedule or getting a project from
+        a schedule.
+        """
+        with open('schedule.csv', 'w', newline='') as f:
+            csv_writer = csv.writer(f)
+            for project in self.__schedule:
+                csv_writer.writerow([project.get_id(), project.get_title(), project.get_size(),
+                                     project.get_priority()])
