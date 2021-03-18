@@ -67,7 +67,7 @@ def menu_view_project():
 
     if choice == "a":
         id_number = input("Enter the ID Number: ")
-
+        print(28 * "-", "PROJECT", 29 * "-")
         project_manager.view_one(id_number)
         menu_view_project()
     elif choice == "b":
