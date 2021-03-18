@@ -12,6 +12,7 @@ class ProjectManager:
 
     def __init__(self):
         self.__schedule = []
+        self.get_schedule()
 
     def is_schedule_empty(self):
         """Checks if the schedule is empty."""
@@ -94,6 +95,34 @@ class ProjectManager:
         self.view_updated_schedule()
 
     # Scheduling related functions
+    def get_schedule(self):
+        """
+        Get the old schedule read from the `schedule.csv` file.
+
+        :exception: IOError
+        """
+
+        try:
+            file = open('schedule.csv', 'r', encoding='utf-8-sig')
+            table = csv.DictReader(file)
+
+            line_count = 0
+            self.__schedule.clear()
+            for row in table:
+                if line_count != 0:
+                    self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
+                line_count += 1
+            # for project in self.__schedule:
+            #     print('sched',project.get_id(),project.get_title(),project.get_size(),project.get_priority())
+
+            file.close()
+        except IOError:
+            print("IO Error: File does not exist, attempting to create a schedule...")
+            self.create_schedule()
+        else:
+            print("Error: Attempting to create a schedule...")
+            self.create_schedule()
+
     def create_schedule(self):
         """
         Creates a schedule of projects read from the `projects.csv` file.
@@ -106,6 +135,7 @@ class ProjectManager:
             table = csv.DictReader(file)
             line_count = 0
 
+            self.__schedule.clear()
             for row in table:
                 if line_count != 0:
                     self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
