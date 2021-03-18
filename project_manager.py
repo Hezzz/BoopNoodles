@@ -12,7 +12,9 @@ class ProjectManager:
 
     def __init__(self):
         self.__schedule = []
-        self.get_schedule()
+        self.__projects = {}
+        self._read_projects()
+        self._read_schedule()
 
     def is_schedule_empty(self):
         """Checks if the schedule is empty."""
@@ -43,24 +45,22 @@ class ProjectManager:
             print("Wrong input, try again.")
 
     def view_one(self, project_id):
+        """
+        Print the project details given an ID number.
 
-        print(28 * "-", "PROJECT", 29 * "-")
-        
-        file = open('projects.csv','r',encoding='utf-8-sig')
-        table = csv.DictReader(file)
+        :exception: KeyError
+        """
 
-        line_count = 0
-        for row in table:
-            if project_id in row['id']:
-                print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
-                print("{:<15}{:^10}{:>15}{:>20}".format(row['id'],row['title'],row['size'],row['priority']))
-                line_count+=1
-                break
-
-        if line_count == 0:
+        try:
+            project = self.__projects[project_id]
+            print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
+            print("{:<15}{:^10}{:>15}{:>20}".format(project.get_id(),
+                                                    project.get_title(),
+                                                    project.get_size(),
+                                                    project.get_priority()
+                                                    ))
+        except KeyError:
             print("Project does not exist. Please try again")
-        
-        file.close()
 
     def view_completed(self):
         """Prints all the completed projects read from the `completed_projects.csv` file."""
@@ -88,14 +88,31 @@ class ProjectManager:
         # Print confirmation, add to the completed list.
         print("Project", project.get_title(), " has been removed from the schedule...")
         self.__overwrite_projects_file(file_name='completed_projects.csv', project=project)
-        print("Project", project.get_title(), " added to completed list...")
+        print("Project", project.get_title(), " added to completed list...\n")
 
         # Overwrite the schedule and print the updated list.
         self.__overwrite_schedule()
         self.view_updated_schedule()
 
+    def _read_projects(self):
+        """
+        Reads the `projects.csv` file and caches it in a dictionary for easy retrieval.
+
+        :exception: IOError
+        """
+        try:
+            print("Reading file, `projects.csv`...")
+            with open('projects.csv', 'r', encoding='utf-8-sig') as file:
+                table = csv.DictReader(file)
+                for row in table:
+                    self.__projects[row['id']] = Project(row['id'], row['title'], row['size'], row['priority'])
+        except IOError:
+            print("File `projects.csv` does not exist yet.")
+        else:
+            print("Successfully read...")
+
     # Scheduling related functions
-    def get_schedule(self):
+    def _read_schedule(self):
         """
         Get the old schedule read from the `schedule.csv` file.
 
@@ -103,25 +120,17 @@ class ProjectManager:
         """
 
         try:
+            print("Reading file, `schedule.csv`...")
             file = open('schedule.csv', 'r', encoding='utf-8-sig')
             table = csv.DictReader(file)
-
-            line_count = 0
-            self.__schedule.clear()
             for row in table:
-                if line_count != 0:
-                    self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
-                line_count += 1
-            # for project in self.__schedule:
-            #     print('sched',project.get_id(),project.get_title(),project.get_size(),project.get_priority())
-
-            file.close()
+                self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
         except IOError:
-            print("IO Error: File does not exist, attempting to create a schedule...")
+            print("File `schedule.csv` does not exist, attempting to create a schedule...")
             self.create_schedule()
         else:
-            print("Error: Attempting to create a schedule...")
-            self.create_schedule()
+            print("Successfully read...")
+            file.close()
 
     def create_schedule(self):
         """
@@ -133,20 +142,16 @@ class ProjectManager:
         try:
             file = open('projects.csv', 'r', encoding='utf-8-sig')
             table = csv.DictReader(file)
-            line_count = 0
-
             self.__schedule.clear()
             for row in table:
-                if line_count != 0:
-                    self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
-                line_count += 1
+                self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
 
             self.__schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
             self.__overwrite_schedule()
-            file.close()
         except IOError:
-            print("Required file `project.csv` does not exist! Input project details first.")
+            print("Required file `projects.csv` does not exist! Input project details first.")
         else:
+            file.close()
             print("A schedule has been created.")
 
     def view_updated_schedule(self):
@@ -214,6 +219,6 @@ class ProjectManager:
                 next(row)
                 for col in row:
                     col = col.split(',')
-                    print("{:<15}{:^10}{:>15}{:>20}".format(col[0],col[1],col[2],col[3]))
+                    print("{:<15}{:^10}{:>15}{:>20}".format(col[0], col[1], col[2], col[3]))
         except IOError:
             print(error_message)
