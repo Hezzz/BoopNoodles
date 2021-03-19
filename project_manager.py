@@ -13,6 +13,7 @@ class ProjectManager:
     def __init__(self):
         self.__schedule = []
         self.__projects = {}
+
         self._read_projects()
         self._read_schedule()
 
@@ -20,6 +21,11 @@ class ProjectManager:
         """Checks if the schedule is empty."""
 
         return not self.__schedule
+
+    def is_projects_empty(self):
+        """Checks if there are any projects."""
+
+        return not self.__projects
 
     # Project related functions
     def input_project(self):
@@ -38,9 +44,12 @@ class ProjectManager:
             priority = int(input("Priority: "))
             project = Project(project_id=id_num, title=title, size=size, priority=priority)
 
-            self.__overwrite_projects_file(file_name='projects.csv', project=project)
-            print("Project has been added.")
-
+            if self.__projects.get(id_num):
+                print("Project with the same ID already exists.")
+            else:
+                self.__projects[id_num] = project
+                self.__overwrite_append(file_name='projects.csv', project=project)
+                print("Project has been added.")
         except TypeError:
             print("Wrong input, try again.")
 
@@ -53,12 +62,13 @@ class ProjectManager:
 
         try:
             project = self.__projects[project_id]
-            print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
-            print("{:<15}{:^10}{:>15}{:>20}".format(project.get_id(),
-                                                    project.get_title(),
-                                                    project.get_size(),
-                                                    project.get_priority()
-                                                    ))
+            print("{:<15}{:^10}{:>17}{:>21}{:>23}".format("ID", "TITLE", "SIZE", "PRIORITY", "STATUS"))
+            print("{:<15}{:^10}{:>15}{:>20}{:>25}".format(project.get_id(),
+                                                          project.get_title(),
+                                                          project.get_size(),
+                                                          project.get_priority(),
+                                                          project.get_status(),
+                                                          ))
         except KeyError:
             print("Project does not exist. Please try again")
 
@@ -84,14 +94,16 @@ class ProjectManager:
         # Print schedule then pop the topmost project.
         self.view_updated_schedule()
         project = self.__schedule.pop(0)
+        project.change_status()
 
         # Print confirmation, add to the completed list.
         print("Project", project.get_title(), " has been removed from the schedule...")
-        self.__overwrite_projects_file(file_name='completed_projects.csv', project=project)
+        self.__overwrite_append(file_name='completed_projects.csv', project=project)
+        self.__overwrite(file_name='projects.csv', project_list=self.__projects.values())
         print("Project", project.get_title(), " added to completed list...\n")
 
         # Overwrite the schedule and print the updated list.
-        self.__overwrite_schedule()
+        self.__overwrite(file_name='schedule.csv', project_list=self.__schedule)
         self.view_updated_schedule()
 
     def _read_projects(self):
@@ -105,9 +117,11 @@ class ProjectManager:
             with open('projects.csv', 'r', encoding='utf-8-sig') as file:
                 table = csv.DictReader(file)
                 for row in table:
-                    self.__projects[row['id']] = Project(row['id'], row['title'], row['size'], row['priority'])
+                    self.__projects[int(row['id'])] = Project(int(row['id']), row['title'],
+                                                              int(row['size']), int(row['priority']),
+                                                              row['status'])
         except IOError:
-            print("File `projects.csv` does not exist yet.")
+            print("File `projects.csv` does not exist, no projects available yet.")
         else:
             print("Successfully read...")
 
@@ -124,34 +138,25 @@ class ProjectManager:
             file = open('schedule.csv', 'r', encoding='utf-8-sig')
             table = csv.DictReader(file)
             for row in table:
-                self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
+                self.__schedule.append(Project(int(row['id']), row['title'], int(row['size']),
+                                               int(row['priority']), row['status']))
         except IOError:
-            print("File `schedule.csv` does not exist, attempting to create a schedule...")
-            self.create_schedule()
+            print("File `schedule.csv` does not exist, no schedule set yet.")
         else:
             print("Successfully read...")
             file.close()
 
     def create_schedule(self):
-        """
-        Creates a schedule of projects read from the `projects.csv` file.
+        """Creates a schedule of projects."""
 
-        :exception: IOError
-        """
+        self.__schedule.clear()
+        for project in self.__projects.values():
+            if project.get_status() != 'DONE':
+                self.__schedule.append(project)
 
-        try:
-            file = open('projects.csv', 'r', encoding='utf-8-sig')
-            table = csv.DictReader(file)
-            self.__schedule.clear()
-            for row in table:
-                self.__schedule.append(Project(row['id'], row['title'], row['size'], row['priority']))
-
+        if not self.is_schedule_empty():
             self.__schedule.sort(key=lambda x: (x.get_priority(), x.get_size()))
-            self.__overwrite_schedule()
-        except IOError:
-            print("Required file `projects.csv` does not exist! Input project details first.")
-        else:
-            file.close()
+            self.__overwrite(file_name='schedule.csv', project_list=self.__schedule)
             print("A schedule has been created.")
 
     def view_updated_schedule(self):
@@ -161,24 +166,26 @@ class ProjectManager:
         self.view_file('schedule.csv', error_message)
 
     # File handling reusable methods
-    def __overwrite_schedule(self):
+    @staticmethod
+    def __overwrite(file_name, project_list):
         """
         Creates and overwrites the `schedule.csv` file.
         Used when creating a schedule or getting a project from
         a schedule.
         """
-        with open('schedule.csv', 'w', newline='') as schedule_file:
-            csv_writer = csv.writer(schedule_file)
-            csv_writer.writerow(["id", "title", "size", "priority"])
-            for project in self.__schedule:
+        with open(file_name, 'w', newline='') as outfile:
+            csv_writer = csv.writer(outfile)
+            csv_writer.writerow(["id", "title", "size", "priority", "status"])
+            for project in project_list:
                 csv_writer.writerow([project.get_id(),
                                      project.get_title(),
                                      project.get_size(),
-                                     project.get_priority()]
+                                     project.get_priority(),
+                                     project.get_status()]
                                     )
 
     @staticmethod
-    def __overwrite_projects_file(file_name, project):
+    def __overwrite_append(file_name, project):
         """
         Overwrites a specified project-related file if it exists;
         otherwise, creates a new one.
@@ -188,7 +195,7 @@ class ProjectManager:
         """
 
         # Field/Column names
-        field_names = ["id", "title", "size", "priority"]
+        field_names = ["id", "title", "size", "priority", "status"]
 
         # Check if projects.csv exist; if not then create a `project.csv`
         if not path.exists(file_name):
@@ -203,7 +210,8 @@ class ProjectManager:
             csv_writer.writerow({"id": project.get_id(),
                                  "title": project.get_title(),
                                  "size": project.get_size(),
-                                 "priority": project.get_priority()}
+                                 "priority": project.get_priority(),
+                                 "status": project.get_status()}
                                 )
 
     @staticmethod
@@ -215,10 +223,10 @@ class ProjectManager:
         """
         try:
             with open(filename, 'r') as row:
-                print("{:<15}{:^10}{:>17}{:>21}".format("ID", "TITLE", "SIZE", "PRIORITY"))
+                print("{:<15}{:^10}{:>17}{:>21}{:>23}".format("ID", "TITLE", "SIZE", "PRIORITY", "STATUS"))
                 next(row)
                 for col in row:
                     col = col.split(',')
-                    print("{:<15}{:^10}{:>15}{:>20}".format(col[0], col[1], col[2], col[3]))
+                    print("{:<15}{:^10}{:>15}{:>20}{:>25}".format(col[0], col[1], col[2], col[3], col[4]))
         except IOError:
             print(error_message)
