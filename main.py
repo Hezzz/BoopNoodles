@@ -66,9 +66,12 @@ def menu_view_project():
     choice = input("Please enter your choice: ").lower()
 
     if choice == "a":
-        id_number = input("Enter the ID Number: ")
-        print(28 * "-", "PROJECT", 29 * "-")
-        project_manager.view_one(id_number)
+        try:
+            id_number = int(input("Enter the ID Number: "))
+            print(28 * "-", "PROJECT", 29 * "-")
+            project_manager.view_one(id_number)
+        except TypeError:
+            print("Invalid input. Please input a valid (int) ID.")
         menu_view_project()
     elif choice == "b":
         project_manager.view_completed()
@@ -97,10 +100,10 @@ def menu_schedule_project():
 
     if choice == "a":
         print(66 * "-")
-        if not project_manager.is_schedule_empty():
-            print("Schedule already exists. Please finish first before creating a new one.")
-        else:
+        if not project_manager.is_projects_empty():
             project_manager.create_schedule()
+        else:
+            print("Input projects first.")
         menu_schedule_project()
     elif choice == "b":
         if project_manager.is_schedule_empty():
