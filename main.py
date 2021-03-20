@@ -18,7 +18,7 @@ def main():
 
 
 def menu():
-    print(30 * "-", "MENU", 30 * "-")
+    print(42 * "-", "MENU", 42 * "-")
 
     print("""
     a. Input Project Details
@@ -27,7 +27,7 @@ def menu():
     d. Get a Project
     e. Exit
     """)
-    print(66 * "-")
+    print(90 * "-")
 
     choice = input("Please enter your choice: ").lower()
     
@@ -54,21 +54,21 @@ def menu():
 
 
 def menu_view_project():
-    print(26 * "-", "VIEW PROJECT", 26 * "-")
+    print(38 * "-", "VIEW PROJECT", 38 * "-")
     print("""
     a. One Project
     b. Completed
     c. All Projects
     d. Back
     """)
-    print(66 * "-")
+    print(90 * "-")
 
     choice = input("Please enter your choice: ").lower()
 
     if choice == "a":
         try:
             id_number = int(input("Enter the ID Number: "))
-            print(28 * "-", "PROJECT", 29 * "-")
+            print(40 * "-", "PROJECT", 41 * "-")
             project_manager.view_one(id_number)
         except TypeError:
             print("Invalid input. Please input a valid (int) ID.")
@@ -88,18 +88,18 @@ def menu_view_project():
 
 
 def menu_schedule_project():
-    print(24 * "-", "SCHEDULE PROJECT", 24 * "-")
+    print(36 * "-", "SCHEDULE PROJECT", 36 * "-")
     print("""
     a. Create Schedule
     b. View Updated Schedule
     c. Back
     """)
-    print(66 * "-")
+    print(90 * "-")
 
     choice = input("Please enter your choice: ").lower()
 
     if choice == "a":
-        print(66 * "-")
+        print(90 * "-")
         if not project_manager.is_projects_empty():
             project_manager.create_schedule()
         else:
@@ -107,10 +107,10 @@ def menu_schedule_project():
         menu_schedule_project()
     elif choice == "b":
         if project_manager.is_schedule_empty():
-            print(66 * "-")
+            print(90 * "-")
             print("Please create a schedule first.")
         else:
-            print(28 * "-", "SCHEDULE", 28 * "-")
+            print(40 * "-", "SCHEDULE", 40 * "-")
             project_manager.view_updated_schedule()
         menu_schedule_project()
     elif choice == "c":

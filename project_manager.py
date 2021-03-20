@@ -93,17 +93,20 @@ class ProjectManager:
         """
 
         # Print schedule then pop the topmost project.
+        print(40 * "-", "SCHEDULE", 40 * "-")
         self.view_updated_schedule()
         project = self.__schedule.pop(0)
         project.change_status()
 
         # Print confirmation, add to the completed list.
+        print(90 * "-")
         print("Project", project.get_title(), " has been removed from the schedule...")
         self.__overwrite_append(file_name='completed_projects.csv', project=project)
         self.__overwrite(file_name='projects.csv', project_list=self.__projects.values())
         print("Project", project.get_title(), " added to completed list...\n")
 
         # Overwrite the schedule and print the updated list.
+        print(40 * "-", "SCHEDULE", 40 * "-")
         self.__overwrite(file_name='schedule.csv', project_list=self.__schedule)
         self.view_updated_schedule()
 
