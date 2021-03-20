@@ -11,6 +11,7 @@ class ProjectManager:
     """
 
     def __init__(self):
+        # Schedule queue and Project dictionary, used for caching
         self.__schedule = []
         self.__projects = {}
 
@@ -76,13 +77,13 @@ class ProjectManager:
         """Prints all the completed projects read from the `completed_projects.csv` file."""
 
         error_message = "Required file `completed_projects.csv` does not exist! Complete a project first."
-        self.view_file('completed_projects.csv', error_message)
+        self.__view_file('completed_projects.csv', error_message)
 
     def view_all(self):
         """Prints all the projects received read from the `projects.csv` file."""
 
         error_message = "Required file `projects.csv` does not exist! Input project details first."
-        self.view_file('projects.csv', error_message)
+        self.__view_file('projects.csv', error_message)
 
     def get_project(self):
         """
@@ -163,7 +164,7 @@ class ProjectManager:
         """Prints the updated schedule of projects read from the `schedule.csv` file."""
 
         error_message = "Required file `project.csv` does not exist! Please create a schedule first."
-        self.view_file('schedule.csv', error_message)
+        self.__view_file('schedule.csv', error_message)
 
     # File handling reusable methods
     @staticmethod
@@ -215,7 +216,7 @@ class ProjectManager:
                                 )
 
     @staticmethod
-    def view_file(filename, error_message):
+    def __view_file(filename, error_message):
         """
         Reads a given file name and prints the formatted output.
 
