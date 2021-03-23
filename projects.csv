@@ -3,14 +3,4 @@ id,title,size,priority,status
 2,project2,3,4,INC
 3,project3,5,6,INC
 4,project4,2,3,INC
-5,project5,1,1,DONE
-6,project2,2,4,INC
-7,project7,9,7,INC
-8,project8,4,2,INC
-9,project9,6,5,INC
-10,project10,13,2,INC
-11,project11,1,1,DONE
-12,project12,15,3,INC
-13,project13,2,2,INC
-14,project14,3,1,DONE
-15,project15,12,1,INC
+5,project5,15,1,INC
