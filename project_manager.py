@@ -126,6 +126,8 @@ class ProjectManager:
                                                               row['status'])
         except IOError:
             print("File `projects.csv` does not exist, no projects available yet.")
+        except ValueError:
+            print("Unexpected value in file, `projects.csv`. Please verify each value in columns are correct.")
         else:
             print("Successfully read...")
 
@@ -146,6 +148,8 @@ class ProjectManager:
                                                int(row['priority']), row['status']))
         except IOError:
             print("File `schedule.csv` does not exist, no schedule set yet.")
+        except ValueError:
+            print("Unexpected value in file, `schedule.csv`. Please verify each value in columns are correct.")
         else:
             print("Successfully read...")
             file.close()
