@@ -247,6 +247,8 @@ class ProjectManager:
 
     @staticmethod
     def __is_invalid_project(project):
+        """Checks the validity of each project."""
+
         try:
             if project.get_id() < 0:
                 raise KeyError
