@@ -45,7 +45,9 @@ class ProjectManager:
             priority = int(input("Priority: "))
             project = Project(project_id=id_num, title=title, size=size, priority=priority)
 
-            if self.__projects.get(id_num):
+            if self.__is_invalid_project(project):
+                print("Please try again.")
+            elif self.__projects.get(id_num):
                 print("Project with the same ID already exists.")
             else:
                 self.__projects[id_num] = project
@@ -121,9 +123,11 @@ class ProjectManager:
             with open('projects.csv', 'r', encoding='utf-8-sig') as file:
                 table = csv.DictReader(file)
                 for row in table:
-                    self.__projects[int(row['id'])] = Project(int(row['id']), row['title'],
-                                                              int(row['size']), int(row['priority']),
-                                                              row['status'])
+                    project = Project(int(row['id']), row['title'],
+                                      int(row['size']), int(row['priority']),
+                                      row['status'])
+                    if not self.__is_invalid_project(project):
+                        self.__projects[int(row['id'])] = project
         except IOError:
             print("File `projects.csv` does not exist, no projects available yet.")
         except ValueError:
@@ -144,8 +148,10 @@ class ProjectManager:
             file = open('schedule.csv', 'r', encoding='utf-8-sig')
             table = csv.DictReader(file)
             for row in table:
-                self.__schedule.append(Project(int(row['id']), row['title'], int(row['size']),
-                                               int(row['priority']), row['status']))
+                project = Project(int(row['id']), row['title'], int(row['size']),
+                                  int(row['priority']), row['status'])
+                if not self.__is_invalid_project(project):
+                    self.__schedule.append(project)
         except IOError:
             print("File `schedule.csv` does not exist, no schedule set yet.")
         except ValueError:
@@ -238,3 +244,23 @@ class ProjectManager:
                     print("{:<15}{:^10}{:>15}{:>20}{:>25}".format(col[0], col[1], col[2], col[3], col[4]))
         except IOError:
             print(error_message)
+
+    @staticmethod
+    def __is_invalid_project(project):
+        try:
+            if project.get_id() < 0:
+                raise KeyError
+            if project.get_size() < 50 or project.get_size() > 500:
+                raise ValueError
+            assert project.get_priority() > 0
+        except KeyError:
+            print("Invalid project key.")
+            return True
+        except ValueError:
+            print("Project's size is out of range.")
+            return True
+        except AssertionError:
+            print("Invalid project priority.")
+            return True
+        else:
+            return False

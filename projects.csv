@@ -1,6 +1,7 @@
 id,title,size,priority,status
-1,project1,5,6,INC
-2,project2,3,4,INC
-3,project3,5,6,INC
-4,project4,2,3,INC
-5,project5,15,1,INC
+1,project1,55,6,DONE
+2,project2,78,4,DONE
+3,project3,66,6,DONE
+4,project4,89,3,DONE
+5,project5,69,1,DONE
+6,project6,76,3,DONE
