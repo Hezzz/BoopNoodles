@@ -70,7 +70,7 @@ class ProjectManager:
                                                           project.get_priority(),
                                                           project.get_status(),
                                                           ))
-        except KeyError:
+        except (KeyError, ValueError):
             print("Project does not exist. Please try again")
 
     def view_completed(self):
