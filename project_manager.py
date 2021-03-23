@@ -51,7 +51,7 @@ class ProjectManager:
                 self.__projects[id_num] = project
                 self.__overwrite_append(file_name='projects.csv', project=project)
                 print("Project has been added.")
-        except TypeError:
+        except ValueError:
             print("Please input valid project details, try again.")
 
     def view_one(self, project_id):
